@@ -349,7 +349,7 @@ class Player(Entity):
 				self.xvel = -3
 			else:
 				self.xvel = -3 * math.fabs(math.cos(self.whichRope.slope))
-				self.yvel = -3 * math.fabs(math.sin(self.whichRope.slope))
+				self.yvel = 3 * math.sin(self.whichRope.slope)
 				if ropeWalkSound.get_num_channels() == 0:
 					ropeWalkSound.play()
 			if self.facing == 0:
@@ -360,7 +360,7 @@ class Player(Entity):
 				self.xvel = 3
 			else:
 				self.xvel = 3 * math.fabs(math.cos(self.whichRope.slope))
-				self.yvel = 3 * math.fabs(math.sin(self.whichRope.slope))
+				self.yvel = 3 * math.sin(self.whichRope.slope)
 				if ropeWalkSound.get_num_channels() == 0:
 					ropeWalkSound.play()
 			if self.facing == 1:
@@ -379,7 +379,7 @@ class Player(Entity):
 		# increment in x direction
 		self.rect.left += self.xvel
 		# do x-axis collisions
-		self.collide(self.xvel, 0, platforms, [])
+		self.collide(self.xvel, 0, platforms, ropes)
 		# increment in y direction
 		self.rect.top += self.yvel
 		# assuming we're in the air
@@ -390,9 +390,10 @@ class Player(Entity):
 	def collide(self, xvel, yvel, platforms, ropes):
 		for p in platforms:
 			if pygame.sprite.collide_rect(self, p) and not self.onRope:
-				if xvel > 0: self.rect.right = p.rect.left
-				if xvel < 0: self.rect.left = p.rect.right
-				if yvel > 0:
+				if xvel > 0 and self.rect.right >= p.rect.left and self.rect.right <= p.rect.right and self.rect.left <= p.rect.left and p.type in (TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT, THIN_LEFT): self.rect.right = p.rect.left
+				if xvel < 0 and self.rect.left <= p.rect.right and self.rect.left >= p.rect.left and self.rect.right >= p.rect.right and p.type in (TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT, THIN_RIGHT): 
+					self.rect.left = p.rect.right
+				if yvel > 0 and self.rect.bottom >= p.rect.top:
 					self.rect.bottom = p.rect.top
 					self.onGround = True
 					self.onRope = False
@@ -401,7 +402,10 @@ class Player(Entity):
 						self.yarn += 1
 						p.hasYarn = False
 						yarnSound.play()
-				if yvel < 0: self.rect.top = p.rect.bottom
+				if self.rect.top <= p.rect.bottom and self.rect.top >= p.rect.top and p.type in (BOTTOM_LEFT, BOTTOM_MIDDLE, BOTTOM_RIGHT, THIN_LEFT, THIN_MIDDLE, THIN_RIGHT):
+					self.rect.top = p.rect.bottom
+					if xvel > 0: self.rect.right = p.rect.left
+					if xvel < 0: self.rect.left = p.rect.right
 		for r in ropes:
 			if r.collidesWith(self.rect):
 				self.onRope = True
