@@ -1,6 +1,7 @@
 import pygame
 import math
 import random
+import os
 
 DISPLAY = (32*25, 32*15)
 DEPTH = 32
@@ -107,28 +108,28 @@ def main():
 	
 	screenMode = TITLE
 	prevScreen = TITLE
-	titleScreen = pygame.image.load("Images\\title.gif")
+	titleScreen = pygame.image.load(os.path.join("Images","title.gif"))
 	titleRect = titleScreen.get_rect()
-	winScreen = pygame.image.load("Images\\win_screen.gif")
+	winScreen = pygame.image.load(os.path.join("Images","win_screen.gif"))
 	winRect = winScreen.get_rect()
-	loseScreen = pygame.image.load("Images\\lose_screen.gif")
+	loseScreen = pygame.image.load(os.path.join("Images","lose_screen.gif"))
 	loseRect = loseScreen.get_rect()
-	helpScreen = pygame.image.load("Images\\instructions.gif")
+	helpScreen = pygame.image.load(os.path.join("Images","instructions.gif"))
 	helpRect = helpScreen.get_rect()
 	
-	cancelSound = pygame.mixer.Sound("Sounds\Cancel8-Bit.ogg")
-	confirmSound = pygame.mixer.Sound("Sounds\Confirm8-Bit.ogg")
-	selectSound = pygame.mixer.Sound("Sounds\Select8-Bit.ogg")
-	yarnSound = pygame.mixer.Sound("Sounds\Powerup.ogg")
-	ropeWalkSound = pygame.mixer.Sound("Sounds\DownStairs8-Bit.ogg")
-	winSound = pygame.mixer.Sound("Sounds\Menu8-Bit.ogg")
-	loseSound = pygame.mixer.Sound("Sounds\Fart.ogg")
+	cancelSound = pygame.mixer.Sound(os.path.join("Sounds","Cancel8-Bit.ogg"))
+	confirmSound = pygame.mixer.Sound(os.path.join("Sounds","Confirm8-Bit.ogg"))
+	selectSound = pygame.mixer.Sound(os.path.join("Sounds","Select8-Bit.ogg"))
+	yarnSound = pygame.mixer.Sound(os.path.join("Sounds","Powerup.ogg"))
+	ropeWalkSound = pygame.mixer.Sound(os.path.join("Sounds","DownStairs8-Bit.ogg"))
+	winSound = pygame.mixer.Sound(os.path.join("Sounds","Menu8-Bit.ogg"))
+	loseSound = pygame.mixer.Sound(os.path.join("Sounds","Fart.ogg"))
 	
-	bg = pygame.image.load("Images\\bg2.gif")
+	bg = pygame.image.load(os.path.join("Images","bg2.gif"))
 	bgRect = bg.get_rect()
-	yarnSprite = pygame.image.load("Images\\yarn2.gif")
+	yarnSprite = pygame.image.load(os.path.join("Images","yarn2.gif"))
 	bigYarnSprite = pygame.transform.scale2x(yarnSprite)
-	flagSprite = pygame.image.load("Images\\flag2t.gif")
+	flagSprite = pygame.image.load(os.path.join("Images","flag2t.gif"))
 	
 	currentLevel = 0
 	
@@ -320,7 +321,7 @@ class Player(Entity):
 		self.onGround = False
 		self.onRope = False
 		self.whichRope = None
-		self.image = pygame.image.load("Images\\llama2.gif")
+		self.image = pygame.image.load(os.path.join("Images","llama2.gif"))
 		self.rect = pygame.Rect(x, y, 32, 32)
 		self.yarn = 2
 		self.facing = 0 # 0 for facing right, 1 for facing left
@@ -421,29 +422,29 @@ class Platform(Entity):
 	def __init__(self, x, y, hasYarn, type):
 		Entity.__init__(self)
 		if type == 'A':
-			self.imageFilename = "Images\\tl.gif"
+			self.imageFilename = os.path.join("Images","tl.gif")
 		elif type == 'B':
-			self.imageFilename = "Images\\tm.gif"
+			self.imageFilename = os.path.join("Images","tm.gif")
 		elif type == 'C':
-			self.imageFilename = "Images\\tr.gif"
+			self.imageFilename = os.path.join("Images","tr.gif")
 		elif type == 'D':
-			self.imageFilename = "Images\\ml.gif"
+			self.imageFilename = os.path.join("Images","ml.gif")
 		elif type == 'E':
-			self.imageFilename = "Images\\mm.gif"
+			self.imageFilename = os.path.join("Images","mm.gif")
 		elif type == 'F':
-			self.imageFilename = "Images\\mr.gif"
+			self.imageFilename = os.path.join("Images","mr.gif")
 		elif type == 'G':
-			self.imageFilename = "Images\\bl.gif"
+			self.imageFilename = os.path.join("Images","bl.gif")
 		elif type == 'H':
-			self.imageFilename = "Images\\bm.gif"
+			self.imageFilename = os.path.join("Images","bm.gif")
 		elif type == 'I':
-			self.imageFilename = "Images\\br.gif"
+			self.imageFilename = os.path.join("Images","br.gif")
 		elif type == 'J':
-			self.imageFilename = "Images\\l.gif"
+			self.imageFilename = os.path.join("Images","l.gif")
 		elif type == 'K':
-			self.imageFilename = "Images\\m.gif"
+			self.imageFilename = os.path.join("Images","m.gif")
 		elif type == 'L':
-			self.imageFilename = "Images\\r.gif"
+			self.imageFilename = os.path.join("Images","r.gif")
 		self.image = pygame.image.load(self.imageFilename)
 		self.rect = pygame.Rect(x, y, 32, 32)
 		self.hasYarn = hasYarn
