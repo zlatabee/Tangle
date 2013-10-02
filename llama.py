@@ -349,7 +349,6 @@ class Player(Entity):
 				self.xvel = -3
 			else:
 				self.xvel = -3 * math.fabs(math.cos(self.whichRope.slope))
-				self.yvel = 3 * math.sin(self.whichRope.slope)
 				if ropeWalkSound.get_num_channels() == 0:
 					ropeWalkSound.play()
 			if self.facing == 0:
@@ -360,7 +359,6 @@ class Player(Entity):
 				self.xvel = 3
 			else:
 				self.xvel = 3 * math.fabs(math.cos(self.whichRope.slope))
-				self.yvel = 3 * math.sin(self.whichRope.slope)
 				if ropeWalkSound.get_num_channels() == 0:
 					ropeWalkSound.play()
 			if self.facing == 1:
@@ -372,14 +370,14 @@ class Player(Entity):
 			# only accelerate with gravity if in the air
 			self.yvel += 0.6
 		if self.onRope:
-			if not self.whichRope.collidesWith(self.rect):
+			if self.rect.left >= max(self.whichRope.x1, self.whichRope.x2) or self.rect.right <= min(self.whichRope.x1, self.whichRope.x2):
 				self.onRope = False
 				self.whichRope = None
 				self.onGround = False
 		# increment in x direction
 		self.rect.left += self.xvel
 		# do x-axis collisions
-		self.collide(self.xvel, 0, platforms, ropes)
+		self.collide(self.xvel, 0, platforms, [])
 		# increment in y direction
 		self.rect.top += self.yvel
 		# assuming we're in the air
@@ -407,19 +405,13 @@ class Player(Entity):
 					if xvel > 0: self.rect.right = p.rect.left
 					if xvel < 0: self.rect.left = p.rect.right
 		for r in ropes:
-			if r.collidesWith(self.rect):
+			if r.collidesWith(self.rect) and (not self.onRope or r == self.whichRope):
 				self.onRope = True
 				self.whichRope = r
-				if r.slope <= 0:
-					if r.x2 >= r.x1:
-						self.rect.bottom = (r.m * self.rect.right) + r.b
-					else:
-						self.rect.bottom = (r.m * self.rect.left) + r.b
+				if (r.slope <= 0 and r.x2 >= r.x1) or (r.slope > 0 and r.x2 < r.x1):
+					self.rect.bottom = (r.m * self.rect.right) + r.b
 				else:
-					if r.x2 >= r.x1:
-						self.rect.bottom = (r.m * self.rect.left) + r.b
-					else:
-						self.rect.bottom = (r.m * self.rect.right) + r.b
+					self.rect.bottom = (r.m * self.rect.left) + r.b
 				return
 
 class Platform(Entity):
